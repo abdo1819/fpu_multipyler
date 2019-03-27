@@ -7,7 +7,7 @@ module testbench();
     reg [65:0] testvectors[1000:0];
 
 
-multi m(.a,.b,.op)
+multi m(.a,.b,.op);
 
 always 
     begin
@@ -15,7 +15,7 @@ always
     end
 
 initial begin
-    $readmemh('mult.tv', testvectors);
+    $readmemh("mult.tv", testvectors);
     vectornum = 0; errors = 0;
 end
 
@@ -29,8 +29,8 @@ always @(negedge clk)
         if(opexp !== op)
             begin
                 $display("error input = %b",{a,b});
-                $$display("output = %b \n(%b exp)",{op,opexp});
-                errors = errors+1
+                $display("output = %b \n(%b exp)",{op,opexp});
+                errors = errors+1;
             end
             vectornum = vectornum +1;
 
