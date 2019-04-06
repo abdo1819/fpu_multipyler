@@ -29,7 +29,7 @@ always @(negedge clk)
         if(opexp !== op)
             begin
                 $display("error input = %b",{a,b});
-                $display("output = %b \n(%b exp)",{op,opexp});
+                // $display("output = %b (%b exp)",{op,opexp});
                 errors = errors+1;
             end
             vectornum = vectornum +1;
