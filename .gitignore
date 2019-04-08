@@ -51,9 +51,6 @@ incomplete!)
 /*
 !/*.gitignore
 ##
-*.qpf
-*.qsf
-*.qws
 
 !*.qpf
 !*.qsf

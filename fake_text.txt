@@ -1,0 +1,9 @@
+134.0625*-2.25 = -301.640625
+
+force a 'h43061000;force b 'hC0100000;run 100; 
+C396D200 
+
+// check fraction overflow
+-14.5*-.375 = 5.4375
+force a 'hc1680000;force b 'hBEC00000 ;run 100;
+40AE0000
