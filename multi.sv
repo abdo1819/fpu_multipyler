@@ -39,7 +39,10 @@ always @(a or b) begin
 	// exponent is biased by 127 so (000000011)
 	//               represented in (100000010)
 	{carryExp,Opower} = Apower + Bpower - 127 + carryFra;
-	
+	// TODO move carry fraction to if condition as adding one
+	// 		to handle when f1*f2+f1+f2>2 
+
+
 	Osign = Asign ^ Bsign;
 	
 	// normlizing number for case of ofraction > 1
