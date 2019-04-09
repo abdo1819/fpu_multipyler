@@ -68,3 +68,6 @@ incomplete!)
 !*.tcl
 
 # End of https://www.gitignore.io/api/alteraquartusii
+multi.qws
+multi.qpf
+multi.qsf

@@ -25,7 +25,7 @@ logic [2:0]carryFra;
 // logic [45:0]sh2;
 // logic [50:0]su;
 
-
+// TODO move intial to always statment so number updates conteniusly
 initial begin
 {Asign,Apower,Afraction} = a;
 {Bsign,Bpower,Bfraction} = b;	
