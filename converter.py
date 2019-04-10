@@ -1,9 +1,8 @@
-def build(exp, fra,sign):
-    exp +=127
-    if(sign == 1):
-        sign = 0
-    else:
-        sign = 1
-    print(sign,bin(exp)[2:],fra)
+import struct
+def covert(f):
+    return struct.pack('>f', f).hex()
 
-build(-1,000,1)
+
+if __name__ == "__main__":
+    print(covert(1.455))
+    print(float(1.465).hex())
