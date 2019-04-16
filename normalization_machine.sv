@@ -1,7 +1,7 @@
 /**
  * Normalization machine
  *                                  ___________
- *      (24-bit)fraction  ----------|         |---------- normalized fraction (23-bit)
+ *      (24-bit)fraction  ----------|         |---------- normalized rounded fraction (23-bit)
  *      (8-bit) exponent  ----------|_________|---------- normalized exponent (8-bit)
  *      (1-bit sign) ------------------------------------ (1-bit sign)
  *
@@ -18,7 +18,15 @@ logic carry;
 always @(fraction) begin
 	
 	if (fraction[23] != 0) begin
-		n_fraction = fraction>>1;
+	// rounding algorithm w/ example
+	// we know that 1101 has 2 rounding possabilites 111 or 110 to fit in 3bit representation 
+	// sub 1101-111 was greater than 1101-110
+	//then 110 should be selected
+	//else do the opesite procedural 
+	n_fraction = fraction>>1;
+	if ((fraction - n_fraction) > (fraction - {n_fraction[22:1],~n_fraction[0]})) begin
+		n_fraction = {n_fraction[22:1],~n_fraction[0]};
+	end
 		{carry,n_exponenet} = exponent+1;
 	end
 	if (carry) begin
