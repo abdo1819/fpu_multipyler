@@ -21,9 +21,9 @@ logic carry;
 	if (fraction[23] != 0) begin
 	// rounding algorithm w/ example
 	// we know that 1101 has 2 rounding possibilities 111 or 110 to fit in 3bit representation 
-	// sub 1101-111 was greater than 1101-110
-	//then 110 should be selected
-	//else do the opesite procedural 
+	// if sub 1101-111 were greater than 1101-110
+	// then 110 should be selected
+	// else do the opposite procedural 
 	n_fraction = fraction>>1;
 	if ((fraction - n_fraction) > (fraction - {n_fraction[22:1],~n_fraction[0]})) begin
 		n_fraction = {n_fraction[22:1],~n_fraction[0]};
