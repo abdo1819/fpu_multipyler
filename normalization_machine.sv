@@ -16,21 +16,26 @@ module normalization_machine(
 		output logic done
 	);
 logic carry;
-	always @(fraction,exponent) begin
+	always @* begin
 	
 	if (fraction[23] != 0) begin
-	// rounding algorithm w/ example
-	// we know that 1101 has 2 rounding possibilities 111 or 110 to fit in 3bit representation 
-	// if sub 1101-111 were greater than 1101-110
-	// then 110 should be selected
-	// else do the opposite procedural 
-	n_fraction = fraction>>1;
-	if ((fraction - n_fraction) > (fraction - {n_fraction[22:1],~n_fraction[0]})) begin
-		n_fraction = {n_fraction[22:1],~n_fraction[0]};
+		// rounding algorithm w/ example
+		// we know that 1101 has 2 rounding possabilites 111 or 110 to fit in 3bit representation 
+		// sub 1101-111 was greater than 1101-110
+		//then 110 should be selected
+		//else do the opesite procedural 
+		n_fraction = fraction>>1;
+		if ((fraction - n_fraction) > (fraction - {n_fraction[22:1],~n_fraction[0]})) begin
+				n_fraction = {n_fraction[22:1],~n_fraction[0]};
+			end
+			{carry,n_exponenet} = exponent+1;
 	end
-		{carry,n_exponenet} = exponent+1;
+	else begin
+		n_fraction = fraction;
+		n_exponenet = exponent;
 	end
-		overflow = carry;
-		done = 1;
+	overflow = carry;
+    done =1 ;
 end
+	
 endmodule
