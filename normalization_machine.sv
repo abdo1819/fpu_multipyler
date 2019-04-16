@@ -20,7 +20,7 @@ logic carry;
 	
 	if (fraction[23] != 0) begin
 	// rounding algorithm w/ example
-	// we know that 1101 has 2 rounding possabilites 111 or 110 to fit in 3bit representation 
+	// we know that 1101 has 2 rounding possibilities 111 or 110 to fit in 3bit representation 
 	// sub 1101-111 was greater than 1101-110
 	//then 110 should be selected
 	//else do the opesite procedural 
