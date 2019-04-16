@@ -16,8 +16,7 @@ module normalization_machine(
 		output logic done
 	);
 logic carry;
-	always @* begin
-	
+	always @(fraction,exponent) begin
 	if (fraction[23] != 0) begin
 		// rounding algorithm w/ example
 		// we know that 1101 has 2 rounding possabilites 111 or 110 to fit in 3bit representation 
@@ -33,9 +32,11 @@ logic carry;
 	else begin
 		n_fraction = fraction;
 		n_exponenet = exponent;
+		carry = 0;
 	end
 	overflow = carry;
     done =1 ;
 end
 	
 endmodule
+
