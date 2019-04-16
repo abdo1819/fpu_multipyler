@@ -15,7 +15,7 @@ module normalization_machine(
 		output overflow
 	);
 logic carry;
-always @(fraction) begin
+	always @(fraction,exponent) begin
 	
 	if (fraction[23] != 0) begin
 	// rounding algorithm w/ example
