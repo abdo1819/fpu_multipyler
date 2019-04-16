@@ -31,6 +31,6 @@ logic carry;
 		{carry,n_exponenet} = exponent+1;
 	end
 		overflow = carry;
+		done = 1;
 end
-	done = 1;
 endmodule
