@@ -12,7 +12,8 @@ module normalization_machine(
 		input logic [7:0] exponent,
 		output logic [22:0] n_fraction,
 		output logic [7:0] n_exponenet,
-		output overflow
+		output logic overflow,
+		output logic done
 	);
 logic carry;
 	always @(fraction,exponent) begin
@@ -29,10 +30,7 @@ logic carry;
 	end
 		{carry,n_exponenet} = exponent+1;
 	end
-	/*if (carry) begin
-		overflow = 1;
-	end*/
 		overflow = carry;
 end
-
+	done = 1;
 endmodule
