@@ -29,9 +29,10 @@ logic carry;
 	end
 		{carry,n_exponenet} = exponent+1;
 	end
-	if (carry) begin
+	/*if (carry) begin
 		overflow = 1;
-	end
+	end*/
+		overflow = carry;
 end
 
 endmodule
