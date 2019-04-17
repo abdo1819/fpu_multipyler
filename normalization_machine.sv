@@ -1,6 +1,6 @@
 /**
  * Normalization machine
- *                                  ___________
+ *                                  _________
  *      (24-bit)fraction  ----------|         |---------- normalized rounded fraction (23-bit)
  *      (8-bit) exponent  ----------|_________|---------- normalized exponent (8-bit)
  *      (1-bit sign) ------------------------------------ (1-bit sign)
@@ -13,9 +13,11 @@ module normalization_machine(
 		output logic [22:0] n_fraction,
 		output logic [7:0] n_exponenet,
 		output logic overflow,
+		output logic underflow,
 		output logic done
 	);
 logic carry;
+integer i = 0;
 	always @(fraction,exponent) begin
 	if (fraction[23] != 0) begin
 		// rounding algorithm w/ example
@@ -28,15 +30,21 @@ logic carry;
 				n_fraction = {n_fraction[22:1],~n_fraction[0]};
 			end
 			{carry,n_exponenet} = exponent+1;
+				overflow = carry;
 	end
 	else begin
-		n_fraction = fraction;
-		n_exponenet = exponent;
-		carry = 0;
+	//scanning the valid bits only
+	while(fraction[22-i]==0)begin
+		i++;
 	end
-	overflow = carry;
+			n_fraction = fraction<<i;
+
+		{carry,n_exponenet} = exponent+1;
+		if (carry == 1) begin
+			underflow = 1;
+		end
+	end
     done =1 ;
 end
 	
 endmodule
-
