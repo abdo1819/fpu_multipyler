@@ -39,7 +39,7 @@ integer i = 0;
 	end
 			n_fraction = fraction<<i;
 
-		{carry,n_exponenet} = exponent+1;
+		{carry,n_exponenet} = exponent+i;
 		if (carry == 1) begin
 			underflow = 1;
 		end
