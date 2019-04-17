@@ -1,6 +1,6 @@
 /**
  * Normalization machine
- *                                  ___________
+ *                                  _________
  *      (24-bit)fraction  ----------|         |---------- normalized rounded fraction (23-bit)
  *      (8-bit) exponent  ----------|_________|---------- normalized exponent (8-bit)
  *      (1-bit sign) ------------------------------------ (1-bit sign)
@@ -26,9 +26,10 @@ integer i = 0;
 		//then 110 should be selected
 		//else do the opesite procedural 
 		n_fraction = fraction>>1;
-		if ((fraction - n_fraction) > (fraction - {n_fraction[22:1],~n_fraction[0]})) begin
+		/*if ((fraction - n_fraction) > (fraction - {n_fraction[22:1],~n_fraction[0]})) begin
 				n_fraction = {n_fraction[22:1],~n_fraction[0]};
-			end
+			end*/
+			n_fraction[0] = 0;
 			{carry,n_exponenet} = exponent+1;
 				overflow = carry;
 	end
