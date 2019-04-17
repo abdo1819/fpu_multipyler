@@ -1,6 +1,6 @@
 /**
  * Normalization machine
- *                                  _________
+ *                                  ___________
  *      (24-bit)fraction  ----------|         |---------- normalized rounded fraction (23-bit)
  *      (8-bit) exponent  ----------|_________|---------- normalized exponent (8-bit)
  *      (1-bit sign) ------------------------------------ (1-bit sign)
