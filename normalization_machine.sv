@@ -29,7 +29,11 @@ integer i = 0;
 		/*if ((fraction - n_fraction) > (fraction - {n_fraction[22:1],~n_fraction[0]})) begin
 				n_fraction = {n_fraction[22:1],~n_fraction[0]};
 			end*/
-			n_fraction[0] = 0;
+			if (fraction[0]==1) begin
+				if (fraction[1]==0) begin
+					n_fraction[0] = 0;
+				end
+			end
 			{carry,n_exponenet} = exponent+1;
 				overflow = carry;
 	end
