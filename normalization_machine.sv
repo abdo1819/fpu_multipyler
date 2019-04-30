@@ -3,7 +3,7 @@
  *                                  ___________
  *      (24-bit)fraction  ----------|         |---------- normalized rounded fraction (23-bit)
  *      (8-bit) exponent  ----------|_________|---------- normalized exponent (8-bit)
- *      (1-bit sign) ------------------------------------ (1-bit sign)
+ *      (1-bit sign) ----------------------------s-------- (1-bit sign)
  *
  * @Author: Abdullah khaled (A-Siam) 
  */

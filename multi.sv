@@ -15,40 +15,36 @@ logic [7:0] Bpower;
 logic Asign;
 logic Bsign;
 
-logic [1:0]carryExp;
+logic carryExp;
 logic [2:0]carryFra;
 
-// TODO delete 
-// logic [32:0]big;
-// logic [45:0]mu;
-// logic [45:0]sh1;
-// logic [45:0]sh2;
-// logic [50:0]su;
 
-// TODO move intial to always statment so number updates conteniusly
-initial begin
-{Asign,Apower,Afraction} = a;
-{Bsign,Bpower,Bfraction} = b;	
-end
 
 always @(a or b) begin
-	
-	// adding brances solve an problem in order of adding
+
+	{Asign,Apower,Afraction} = a;
+	{Bsign,Bpower,Bfraction} = b;	
+
+
+
+
+	// clac fraction (1+f1)(1+f2)=(1+f1*f2+f1+f2) 
 	{carryFra,Ofraction_HI,Ofraction_LO} = ((Afraction*Bfraction) + (Afraction<<23) + (Bfraction<<23));
 	
 	// exponent is biased by 127 so (000000011)
 	//               represented in (100000010)
-	{carryExp,Opower} = Apower + Bpower - 127 + carryFra;
-	// TODO move carry fraction to if condition as adding one
-	// 		to handle when f1*f2+f1+f2>2 
-
-
+	{carryExp,Opower} = Apower + Bpower - 8'd127 ;
+		
+	
 	Osign = Asign ^ Bsign;
 	
-	// normlizing number for case of ofraction > 1
+	// normlizing number for case of ofraction > 2
 	if (carryFra)
+		begin
+		{carryExp,Opower} = Opower + 8'b1; 
 		Ofraction_HI = Ofraction_HI>>1;
-	
+		Ofraction_HI[0] = Ofraction_LO[22];
+		end
 	//check the exponent
 	if (carryExp)
 		$display("overflow"); 
