@@ -26,14 +26,16 @@ logic [2:0]carryFra;
 // logic [50:0]su;
 
 // TODO move intial to always statment so number updates conteniusly
-initial begin
+/*initial begin
 {Asign,Apower,Afraction} = a;
 {Bsign,Bpower,Bfraction} = b;	
 end
-
+*/
 always @(a or b) begin
+	{Asign,Apower,Afraction} = a;
+	{Bsign,Bpower,Bfraction} = b;	
 	
-	// adding brances solve an problem in order of adding
+	// adding brances to solve an issue with order of adding
 	{carryFra,Ofraction_HI,Ofraction_LO} = ((Afraction*Bfraction) + (Afraction<<23) + (Bfraction<<23));
 	
 	// exponent is biased by 127 so (000000011)
@@ -41,21 +43,14 @@ always @(a or b) begin
 	{carryExp,Opower} = Apower + Bpower - 127 + carryFra;
 	// TODO move carry fraction to if condition as adding one
 	// 		to handle when f1*f2+f1+f2>2 
-
-
-	Osign = Asign ^ Bsign;
-	
+	Osign = Asign ^ Bsign;	
 	// normlizing number for case of ofraction > 1
 	if (carryFra)
 		Ofraction_HI = Ofraction_HI>>1;
-	
 	//check the exponent
 	if (carryExp)
 		$display("overflow"); 
-		
 	op = {Osign , Opower , Ofraction_HI};
-	
-	
 end
 	
 endmodule
