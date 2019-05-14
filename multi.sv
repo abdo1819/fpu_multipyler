@@ -15,13 +15,13 @@ logic [7:0] Bpower;
 logic Asign;
 logic Bsign;
 
-logic ones_Apower = &Apower;
-logic zeros_Apower = ~|Apower;
-logic zero_Afraction = ~|Afraction;
 
-logic ones_Bpower = &Bpower;
-logic zeros_Bpower = ~|Bpower;
-logic zero_Bfraction = ~|Bfraction;
+logic ones_Apower;
+logic zeros_Apower;
+logic zeros_Afraction;
+logic ones_Bpower;
+logic zeros_Bpower;
+logic zeros_Bfraction;
 
 
 logic carryExp;
@@ -33,7 +33,16 @@ always @(a or b) begin
 	
 	{Asign,Apower,Afraction} = a;
 	{Bsign,Bpower,Bfraction} = b;	
-	
+
+	ones_Apower = &Apower;
+	zeros_Apower = ~|Apower;
+	zeros_Afraction = ~|Afraction;
+
+	ones_Bpower = &Bpower;
+	zeros_Bpower = ~|Bpower;
+	zeros_Bfraction = ~|Bfraction;
+
+
 	Osign = Asign ^ Bsign;
 
 	//TODO: special cases
@@ -43,27 +52,27 @@ always @(a or b) begin
 	// 0   and other  => 0
 
 	// if or b is nan (255,not zero)
-	if ((ones_Apower && ~zero_Afraction) || (ones_Bpower && ~zero_Bfraction)) 
+	if ((ones_Apower && ~zeros_Afraction) || (ones_Bpower && ~zeros_Bfraction)) 
 	
 	op = nan;
 	
-	else if ((ones_Apower && zero_Afraction)) // a is inf (255,zeros)
+	else if ((ones_Apower && zeros_Afraction)) // a is inf (255,zeros)
 		begin
-		if ((zero_Bpower && zero_Bfraction)) // b is 0 (0,0)
+		if ((zeros_Bpower && zeros_Bfraction)) // b is 0 (0,0)
 			op = nan; // inf and 0 => nan
 		else
 			op = a;  // inf and otherthings => inf
 		end
-	else if ((ones_Bpower && zero_Bfraction)) // b is inf (255,zeros)
+	else if ((ones_Bpower && zeros_Bfraction)) // b is inf (255,zeros)
 		begin
-		if ((zero_Apower && zero_Afraction)) // a is 0
+		if ((zeros_Apower && zeros_Afraction)) // a is 0
 			op = nan; // inf and 0 => nan
 		else
 			op = b; // inf and otherthings => inf
 		end
-	// if or b is zero (0,0)
-	else if ((zero_Apower && zero_Afraction)||(zero_Bpower && zero_Bfraction))
-		op = zero
+	// if or b is zeros (0,0)
+	else if ((zeros_Apower && zeros_Afraction)||(zeros_Bpower && zeros_Bfraction))
+		op = zero;
 
 	else
 	begin
@@ -87,8 +96,8 @@ always @(a or b) begin
 		//if overflow occurs, return inf
 		if (carryExp)
 			$display("overflow"); 
-			Opower = 8'b11111111
-			Ofraction_HI = 23'b0
+			Opower = 8'b11111111;
+			Ofraction_HI = 23'b0;
 		op = {Osign , Opower , Ofraction_HI};
 
 		end
