@@ -15,19 +15,50 @@ logic [7:0] Bpower;
 logic Asign;
 logic Bsign;
 
+logic ones_Apower = &Apower;
+logic zeros_Apower = ~|Apower;
+logic zero_Afraction = ~|Afraction;
+
+logic ones_Bpower = &Bpower;
+logic zeros_Bpower = ~|Bpower;
+logic zero_Bfraction = ~|Bfraction;
+
+
 logic carryExp;
-logic [2:0]carryFra;
+logic [2:0] carryFra;
 
-
+logic [31:0] nan = 32'b01111111100000000000000000000001 ;
 
 always @(a or b) begin
 
 	{Asign,Apower,Afraction} = a;
 	{Bsign,Bpower,Bfraction} = b;	
 
+	//TODO: special cases
+	// nan or nan => nan
+	// inf and 0  => nan
+	// inf and anything => inf
+	// 0   and 0  => 0
 
+	// if or b is nan
+	if ((ones_Apower & ~zero_Afraction) | (ones_Bpower & ~zero_Bfraction)) 
+		// nan 255 exp , non zero frac 
+		op = nan;
 
+	else if ((ones_Apower & zero_Afraction)) // a is inf (255,zeros)
+	begin
+		if ((zero_Bpower & zero_Bfraction)) // b is 0 (0,0)
+			op = nan; // inf and 0 => nan
+		else
+			op = a;  // inf and otherthings => inf
 
+	else if ((ones_Bpower & zero_Bfraction)) // b is inf (255,zeros)
+	begin
+		if ((zero_Apower & zero_Afraction)) // a is 0
+			op = nan; // inf and 0 => nan
+		else
+			op = b; // inf and otherthings => inf
+		
 	// clac fraction (1+f1)(1+f2)=(1+f1*f2+f1+f2) 
 	{carryFra,Ofraction_HI,Ofraction_LO} = ((Afraction*Bfraction) + (Afraction<<23) + (Bfraction<<23));
 	
