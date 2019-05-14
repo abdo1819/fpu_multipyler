@@ -16,9 +16,7 @@ logic Asign;
 logic Bsign;
 
 logic carryExp;
-logic [2:0]carryFra;
-
-
+logic [1:0]carryFra;
 
 always @(a or b) begin
 
@@ -28,8 +26,8 @@ always @(a or b) begin
 
 
 
-	// clac fraction (1+f1)(1+f2)=(1+f1*f2+f1+f2) 
-	{carryFra,Ofraction_HI,Ofraction_LO} = ((Afraction*Bfraction) + (Afraction<<23) + (Bfraction<<23));
+	// clac fraction (1.f1)(1.f2)=(1.fo) 
+	{carryFra,Ofraction_HI,Ofraction_LO}=({1'b1,Afraction}*{1'b1,Bfraction})
 	
 	// exponent is biased by 127 so (000000011)
 	//               represented in (100000010)
@@ -38,12 +36,11 @@ always @(a or b) begin
 	
 	Osign = Asign ^ Bsign;
 	
-	// normlizing number for case of ofraction > 2
-	if (carryFra)
+	// normlizing number for case carryfraction has one at end
+	if (carryFra[1])
 		begin
 		{carryExp,Opower} = Opower + 8'b1; 
-		Ofraction_HI = Ofraction_HI>>1;
-		Ofraction_HI[0] = Ofraction_LO[22];
+		Ofraction_HI = {carryFra[0],Ofraction_HI[22:1]};
 		end
 	//check the exponent
 	if (carryExp)
