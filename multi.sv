@@ -4,8 +4,8 @@ module multi(
 			 input logic [31:0] b
 			 );
 
-logic [22:0]Ofraction_HI; //fraction will neglict any bit after ofraction[22]
-logic [22:0]Ofraction_LO;
+logic [22:0]Ofraction_HI; 
+logic [22:0]Ofraction_LO;	//the least 23 bit will be ignored 
 logic Osign;
 logic [7:0]Opower;
 logic [22:0]Afraction ;
@@ -28,7 +28,7 @@ logic carryExp;
 logic [2:0] carryFra;
 
 logic [31:0] nan = 32'b01111111100000000000000000000001 ;
-logic [31:0] zero= 32'b00000000000000000000000000000000 ;
+logic [31:0] zero= 32'b00000000000000000000000000000000 ; //logic [31:0] zero= '0 ;
 always @(a or b) begin
 	
 	{Asign,Apower,Afraction} = a;
@@ -45,7 +45,7 @@ always @(a or b) begin
 
 	Osign = Asign ^ Bsign;
 
-	//TODO: special cases
+	//special cases:
 	// nan or nan => nan
 	// inf and 0  => nan
 	// inf and other => inf
@@ -53,7 +53,6 @@ always @(a or b) begin
 
 	// if or b is nan (255,not zero)
 	if ((ones_Apower && ~zeros_Afraction) || (ones_Bpower && ~zeros_Bfraction)) 
-	
 	op = nan;
 	
 	else if ((ones_Apower && zeros_Afraction)) // a is inf (255,zeros)
@@ -85,7 +84,7 @@ always @(a or b) begin
 			
 		
 		
-		// normlizing number for case of ofraction > 2
+		// normlizing number in case of ofraction > 2
 		if (carryFra)
 			begin
 			{carryExp,Opower} = Opower + 8'b1; 
@@ -94,7 +93,9 @@ always @(a or b) begin
 			end
 		//check the exponent
 		//if overflow occurs, return inf
+		//SOMETHING DOESN'T SEAM TO BE RIGHT HERE CHECK THIS LATER
 		if (carryExp)
+			
 			$display("overflow"); 
 			Opower = 8'b11111111;
 			Ofraction_HI = 23'b0;
