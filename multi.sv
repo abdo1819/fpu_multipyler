@@ -97,8 +97,8 @@ always @(a or b) begin
 		{carryExp,Opower} = (Apower - 8'd127) + Bpower  ;
 			
 		
-		
-		// normlizing number in case of ofraction > 2
+		// TODO fix error here
+		// normlizing number in case of ofraction >
 		if (carryFra)
 			begin
 			$display("oh man %h",a);
