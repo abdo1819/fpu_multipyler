@@ -51,27 +51,35 @@ always @(a or b) begin
 	// inf and other => inf
 	// 0   and other  => 0
 
-	// if or b is nan (255,not zero)
+	
 	if ((ones_Apower && ~zeros_Afraction) || (ones_Bpower && ~zeros_Bfraction)) 
-	
-	op = nan;
-	
-	else if ((ones_Apower && zeros_Afraction)) // a is inf (255,zeros)
+	// if a or b is nan (255,not zero) => nan
+		op = nan;
+
+	else if ((ones_Apower && zeros_Afraction)) // a is inf or _inf (255,zeros)
 		begin
 		if ((zeros_Bpower && zeros_Bfraction)) // b is 0 (0,0)
 			op = nan; // inf and 0 => nan
 		else
-			op = a;  // inf and otherthings => inf
+			begin
+			op[30:0] = {Apower,Afraction};  // inf/_inf and otherthings => inf/_inf
+			op[31] = Asign ^ Bsign;
+			end
 		end
+
 	else if ((ones_Bpower && zeros_Bfraction)) // b is inf (255,zeros)
 		begin
 		if ((zeros_Apower && zeros_Afraction)) // a is 0
 			op = nan; // inf and 0 => nan
 		else
-			op = b; // inf and otherthings => inf
+			begin
+			op[30:0] = {Apower,Afraction}; // inf/_inf and otherthings => inf/_inf
+			op[31] = Asign ^ Bsign;
+			end
 		end
-	// if or b is zeros (0,0)
+	
 	else if ((zeros_Apower && zeros_Afraction)||(zeros_Bpower && zeros_Bfraction))
+		// if a or b is zeros (0,0)
 		op = zero;
 
 	else

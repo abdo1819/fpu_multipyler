@@ -4,7 +4,7 @@ module testbench();
     reg [31:0] a,b,opexp;
     logic [31:0] op;
     reg [31:0] vectornum,errors;
-    reg [65:0] testvectors[1000:0];
+    reg [96:0] testvectors[1000:0];
 
 
 multi m(.a,.b,.op);
@@ -28,14 +28,15 @@ always @(negedge clk)
     begin
         if(opexp !== op)
             begin
-                $display("error input = %b",{a,b});
-                // $display("output = %b (%b exp)",{op,opexp});
+                $display("error input = %h __ %h",a,b);
+                $display("output = %h  __ (%h exp)",op,opexp);
                 errors = errors+1;
             end
             vectornum = vectornum +1;
 
-        if(testvectors[vectornum] ===95'bx) begin
+        if(testvectors[vectornum] ===97'bx) begin
               $display("%d test complate with %d errors" , vectornum , errors);
+              $finish();
         end
     end
     
