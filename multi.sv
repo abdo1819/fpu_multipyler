@@ -45,7 +45,7 @@ always @(a or b) begin
 
 	Osign = Asign ^ Bsign;
 
-	//TODO: special cases
+	//TODO: test special cases
 	// nan or nan => nan
 	// inf and 0  => nan
 	// inf and other => inf
