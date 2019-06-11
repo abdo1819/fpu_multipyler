@@ -18,6 +18,9 @@ class converter():
         self.inf_=  float('-inf')
         self.undef =float('NAN')
 
+    def h_f(self,h):
+        return struct.unpack('>f',bytes.fromhex(h))[0] 
+    
     def f_h(self,f):
         '''convert floating numbers into 32'bit hex format 
         example :

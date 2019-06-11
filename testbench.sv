@@ -6,6 +6,10 @@ module testbench();
     reg [31:0] vectornum,errors;
     reg [96:0] testvectors[1000:0];
 
+    logic compare;
+    shortreal opr;
+    shortreal opexpr;
+    shortreal diff;
 
 multi m(.a,.b,.op);
 
@@ -23,14 +27,21 @@ always @(posedge clk)
     begin
         #1; {a,b,opexp} = testvectors[vectornum];
     end
-
+    
 always @(negedge clk)
     begin
-        if(opexp !== op)
+        opr = $bitstoshortreal(op);
+        opexpr = $bitstoshortreal(opexp);
+        diff = opr-opexpr;
+        if(diff < 0)
+            diff = diff * -1;
+        if( diff > 0.1)
             begin
                 $display("error input = %h __ %h",a,b);
-                $display("output = %h",op);
-		$display("exp    = %h",opexp);	
+                $display("a = %b\nb = %b",a,b);
+
+                $display("output = %h  __ %f",op ,opr);
+                $display("exp    = %h  __ %f",opexp ,opexpr);	
                 errors = errors+1;
             end
             vectornum = vectornum +1;

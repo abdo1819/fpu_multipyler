@@ -25,7 +25,7 @@ logic zeros_Bfraction;
 
 
 logic carryExp;
-logic [2:0] carryFra;
+logic [1:0] carryFra;
 
 logic [31:0] nan = 32'b01111111110000000000000000000000 ;
 logic [31:0] nan_ = 32'b11111111110000000000000000000000 ;
@@ -97,9 +97,8 @@ always @(a or b) begin
 		{carryExp,Opower} = (Apower - 8'd127) + Bpower  ;
 			
 		
-		// TODO fix error here
 		// normlizing number in case of ofraction >
-		if (carryFra)
+		if (carryFra[1])
 			begin
 			$display("oh man %h",a);
 			{carryExp,Opower} = Opower + 8'b1; 
@@ -107,7 +106,10 @@ always @(a or b) begin
 			Ofraction_HI[22] = carryFra[0];
 			// Ofraction_HI[0] = Ofraction_LO[22];
 			end
-		//check the exponent
+		
+		// Ofraction_HI =Ofraction_HI+1'b1;
+		
+			//check the exponent
 		//if overflow occurs, return inf
 		//SOMETHING DOESN'T SEAM TO BE RIGHT HERE CHECK THIS LATER
 		if (carryExp)
