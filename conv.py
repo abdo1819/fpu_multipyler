@@ -12,12 +12,8 @@ class converter():
             > print(c.inf)
              '7F800000'
         '''
-        # self.zero = '00000000'
-        # self.inf =  '7F800000'
-        # self.inf_=  'FF800000'
-        # self.undef ='7F800001'
-
-        self.zero = float(0)
+        self.zero = float('0')
+        self.zero_ = float('-0')
         self.inf =  float('inf')
         self.inf_=  float('-inf')
         self.undef =float('NAN')
@@ -40,7 +36,7 @@ class converter():
             > f.close()
         '''
   
-        sp = [self.zero,self.inf,self.inf_,self.undef]
+        sp = [self.zero,self.zero_,self.inf,self.inf_,self.undef]
         special_hex = []
         for i in sp:
             for j in sp:
@@ -70,6 +66,10 @@ if __name__ == "__main__":
     f = open('mult.tv','w') #write in new file
     for row in c.special():
         f.write(row+'\n')
+
+    for row in c.randomtest_multi(20):
+        f.write(row+'\n')
+
     f.close()
 
 

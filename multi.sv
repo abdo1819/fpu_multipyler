@@ -27,8 +27,10 @@ logic zeros_Bfraction;
 logic carryExp;
 logic [2:0] carryFra;
 
-logic [31:0] nan = 32'b01111111100000000000000000000001 ;
-logic [31:0] zero= 32'b00000000000000000000000000000000 ; //logic [31:0] zero= '0 ;
+logic [31:0] nan = 32'b01111111110000000000000000000000 ;
+logic [31:0] nan_ = 32'b11111111110000000000000000000000 ;
+
+logic [30:0] zero= 31'b0000000000000000000000000000000 ; //logic [31:0] zero= '0 ;
 always @(a or b) begin
 	
 	{Asign,Apower,Afraction} = a;
@@ -58,58 +60,65 @@ always @(a or b) begin
 
 	else if ((ones_Apower && zeros_Afraction)) // a is inf or _inf (255,zeros)
 		begin
-		if ((zeros_Bpower && zeros_Bfraction)) // b is 0 (0,0)
-			op = nan; // inf and 0 => nan
-		else
+			if ((zeros_Bpower && zeros_Bfraction)) // b is 0 (0,0)
+				op = nan_; // inf and 0 => nan
+			else
 			begin
-			op[30:0] = {Apower,Afraction};  // inf/_inf and otherthings => inf/_inf
-			op[31] = Asign ^ Bsign;
+				op[31]=Asign ^ Bsign;
+				op[30:0] = {Apower,Afraction};  // inf/_inf and otherthings => inf/_inf
 			end
+
 		end
 
 	else if ((ones_Bpower && zeros_Bfraction)) // b is inf (255,zeros)
 		begin
-		if ((zeros_Apower && zeros_Afraction)) // a is 0
-			op = nan; // inf and 0 => nan
-		else
+			if ((zeros_Apower && zeros_Afraction)) // a is 0
+				op = nan_; // inf and 0 => nan
+			else
 			begin
-			op[30:0] = {Apower,Afraction}; // inf/_inf and otherthings => inf/_inf
-			op[31] = Asign ^ Bsign;
+				op[31]=Asign ^ Bsign;			
+				op[30:0] = {Apower,Afraction}; // inf/_inf and otherthings => inf/_inf
 			end
 		end
 	
 	else if ((zeros_Apower && zeros_Afraction)||(zeros_Bpower && zeros_Bfraction))
 		// if a or b is zeros (0,0)
-		op = zero;
-
+		begin	
+		op[30:0] = zero;
+		op[31]=Asign ^ Bsign;
+		end
 	else
-	begin
+		begin
 		// clac fraction (1+f1)(1+f2)=(1+f1*f2+f1+f2) 
 		{carryFra,Ofraction_HI,Ofraction_LO} = ((Afraction*Bfraction) + (Afraction<<23) + (Bfraction<<23));
 		
 		// exponent is biased by 127 so (000000011)
 		//               represented in (100000010)
-		{carryExp,Opower} = Apower + Bpower - 8'd127 ;
+		{carryExp,Opower} = (Apower - 8'd127) + Bpower  ;
 			
 		
 		
 		// normlizing number in case of ofraction > 2
 		if (carryFra)
 			begin
+			$display("oh man %h",a);
 			{carryExp,Opower} = Opower + 8'b1; 
 			Ofraction_HI = Ofraction_HI>>1;
-			Ofraction_HI[0] = Ofraction_LO[22];
+			Ofraction_HI[22] = carryFra[0];
+			// Ofraction_HI[0] = Ofraction_LO[22];
 			end
 		//check the exponent
 		//if overflow occurs, return inf
 		//SOMETHING DOESN'T SEAM TO BE RIGHT HERE CHECK THIS LATER
 		if (carryExp)
-			
+			begin	
 			$display("overflow"); 
 			Opower = 8'b11111111;
 			Ofraction_HI = 23'b0;
-		op = {Osign , Opower , Ofraction_HI};
+			end
 
+		op = {Osign , Opower , Ofraction_HI};
 		end
+	
 	end
 endmodule

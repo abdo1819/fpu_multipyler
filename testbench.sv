@@ -29,14 +29,15 @@ always @(negedge clk)
         if(opexp !== op)
             begin
                 $display("error input = %h __ %h",a,b);
-                $display("output = %h  __ (%h exp)",op,opexp);
+                $display("output = %h",op);
+		$display("exp    = %h",opexp);	
                 errors = errors+1;
             end
             vectornum = vectornum +1;
 
         if(testvectors[vectornum] ===97'bx) begin
               $display("%d test complate with %d errors" , vectornum , errors);
-              $finish();
+              $stop();
         end
     end
     
