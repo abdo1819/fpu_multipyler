@@ -90,7 +90,7 @@ always @(a or b) begin
 	else
 		begin
 		// clac fraction (1+f1)(1+f2)=(1+f1*f2+f1+f2) 
-		{carryFra,Ofraction_HI,Ofraction_LO} = ((Afraction*Bfraction) + (Afraction<<23) + (Bfraction<<23));
+		{carryFra,Ofraction_HI,Ofraction_LO} = {1'b1,Afraction}*{1'b1,Bfraction} ;
 		
 		// exponent is biased by 127 so (000000011)
 		//               represented in (100000010)
