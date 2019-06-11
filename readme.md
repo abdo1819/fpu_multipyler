@@ -1,7 +1,7 @@
 # 32 bit fpu_multiplier
 
 ## moudule [mult.sv](file://mult.sv)
-can do 32 bit 32 bit floating point multiplication
+can do 32 bit floating point multiplication
 with care about special cases  can be tested with [testbench.sv](file://testbench.sv)
 
 ## [testbench.sv](file://testbench.sv)
