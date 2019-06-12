@@ -42,6 +42,9 @@ class converter():
         sp = [self.zero,self.zero_,self.inf,self.inf_,self.undef]
         special_hex = []
         for i in sp:
+            for x in range(10):
+                f = random.random()
+                special_hex.append(self.f_h(i)+'_'+self.f_h(f)+'_'+self.f_h(f*i))
             for j in sp:
                 special_hex.append(self.f_h(i)+'_'+self.f_h(j)+'_'+self.f_h(i*j))
         return special_hex
@@ -70,7 +73,7 @@ if __name__ == "__main__":
     for row in c.special():
         f.write(row+'\n')
 
-    for row in c.randomtest_multi(20):
+    for row in c.randomtest_multi(40):
         f.write(row+'\n')
 
     f.close()
