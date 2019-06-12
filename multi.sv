@@ -27,6 +27,8 @@ logic zeros_Bfraction;
 logic carryExp;
 logic [1:0] carryFra;
 
+logic [2:0] roundbits;
+
 logic [31:0] nan = 32'b01111111110000000000000000000000 ;
 logic [31:0] nan_ = 32'b11111111110000000000000000000000 ;
 
@@ -91,7 +93,6 @@ always @(a or b) begin
 		begin
 		// clac fraction (1+f1)(1+f2)=(1+f1*f2+f1+f2) 
 		{carryFra,Ofraction_HI,Ofraction_LO} = {1'b1,Afraction}*{1'b1,Bfraction} ;
-		
 		// exponent is biased by 127 so (000000011)
 		//               represented in (100000010)
 		{carryExp,Opower} = (Apower - 8'd127) + Bpower  ;
@@ -100,13 +101,28 @@ always @(a or b) begin
 		// normlizing number in case of ofraction >
 		if (carryFra[1])
 			begin
-			$display("oh man %h",a);
+			$display("fraction normlized and a = %h",a); 
+
 			{carryExp,Opower} = Opower + 8'b1; 
+			Ofraction_LO = Ofraction_LO>>1;
+			Ofraction_LO[22] = Ofraction_HI[0] ;
+			
 			Ofraction_HI = Ofraction_HI>>1;
 			Ofraction_HI[22] = carryFra[0];
-			// Ofraction_HI[0] = Ofraction_LO[22];
-			end
+		end
 		
+		// rounding 
+		if (Ofraction_LO[22])
+		begin
+			$display("rounded and a = %h",a); 
+			if (Ofraction_LO[22:20] == 3'b100)
+			begin
+				if (Ofraction_HI[0] == 1'b1)
+					Ofraction_HI =Ofraction_HI+1'b1;
+			end
+			else
+				Ofraction_HI =Ofraction_HI+1'b1;
+		end
 		// Ofraction_HI =Ofraction_HI+1'b1;
 		
 			//check the exponent
