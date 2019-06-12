@@ -101,7 +101,7 @@ always @(a or b) begin
 		// normlizing number in case of ofraction >
 		if (carryFra[1])
 			begin
-			$display("fraction normlized and a = %h",a); 
+			// $display("fraction normlized and a = %h",a); 
 
 			{carryExp,Opower} = Opower + 8'b1; 
 			Ofraction_LO = Ofraction_LO>>1;
@@ -114,7 +114,7 @@ always @(a or b) begin
 		// rounding 
 		if (Ofraction_LO[22])
 		begin
-			$display("rounded and a = %h",a); 
+			// $display("rounded and a = %h",a); 
 			if (Ofraction_LO[22:20] == 3'b100)
 			begin
 				if (Ofraction_HI[0] == 1'b1)

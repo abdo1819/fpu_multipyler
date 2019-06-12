@@ -35,7 +35,8 @@ always @(negedge clk)
         diff = opr-opexpr;
         if(diff < 0)
             diff = diff * -1;
-        if( diff > 0.1)
+        // if( diff > 0.1)
+        if  (~(( (opexp === op) | (diff < 0.1) )))
             begin
                 $display("error input = %h __ %h",a,b);
                 $display("a = %b\nb = %b",a,b);
