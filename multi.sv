@@ -36,9 +36,14 @@ logic [31:0] nan_ = 32'b11111111110000000000000000000000 ;
 
 logic [30:0] zero= 31'b0000000000000000000000000000000 ; //logic [31:0] zero= '0 ;
 
-always @(posedge clk)
+	always @(posedge clk)
 	begin
 		finish = 0;
+	end
+	
+	always@(negedge clk)
+	begin
+	finish = 1;
 	end
 
 always @(a or b) begin
@@ -145,7 +150,6 @@ always @(a or b) begin
 
 		op = {Osign , Opower , Ofraction_HI};
 	end
-	finish = #50 1;
 	
 	end
 endmodule
