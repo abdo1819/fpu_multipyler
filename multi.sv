@@ -1,7 +1,9 @@
 module multi(
+		     input clk,
 			 output logic [31:0] op,  //O/P
 			 input logic [31:0] a,
-			 input logic [31:0] b
+			 input logic [31:0] b,
+			 output logic finish
 			 );
 
 logic [22:0]Ofraction_HI; 
@@ -33,6 +35,12 @@ logic [31:0] nan = 32'b01111111110000000000000000000000 ;
 logic [31:0] nan_ = 32'b11111111110000000000000000000000 ;
 
 logic [30:0] zero= 31'b0000000000000000000000000000000 ; //logic [31:0] zero= '0 ;
+
+always @(posedge clk)
+	begin
+		finish = 0;
+	end
+
 always @(a or b) begin
 	
 	{Asign,Apower,Afraction} = a;
@@ -136,7 +144,8 @@ always @(a or b) begin
 			end
 
 		op = {Osign , Opower , Ofraction_HI};
-		end
+	end
+	finish = #50 1;
 	
 	end
 endmodule
